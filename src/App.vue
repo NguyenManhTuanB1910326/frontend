@@ -1,30 +1,22 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view />
+  <component :is="layout">
+    <router-view />
+    <!-- thằng này là thằng thay đổi chính là thằng slot-->
+  </component>
 </template>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+<script>
+import { computed } from "vue";
+import { useRoute } from "vue-router";
+// thay vì import trực tiếp components layout thì ko hay nên utils/import.js sẽ import hay hơn
+// import utils/import ben main.js
+export default {
+  setup() {
+    const route = useRoute();
+    return {
+      //Vì layout trong app chỉ chạy 1 lần nên thay đổi router-view
+      // thì giá trị của layout vẫn ko thay đổi => sử dụng watch or computed
+      layout: computed(() => (route.meta.layout || "default") + "-layout"),
+    };
+  },
+};
+</script>
